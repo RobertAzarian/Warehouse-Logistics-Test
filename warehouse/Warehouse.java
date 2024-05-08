@@ -33,6 +33,7 @@ public class Warehouse {
 		} else {
 			materialsInStock.put(material, freeSpace);
 		}
+		
 	}
 	
 	public void delete(Material material) {
