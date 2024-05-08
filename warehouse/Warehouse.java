@@ -5,54 +5,50 @@ import java.util.TreeMap;
 
 public class Warehouse {
 	int id;
-	int[] cellsWithID = new int[64];		// расположение ID всех материалов (с нулевым кол-ом).
-	int countOfAllMaterialsInGame = Material.values().length;
-	Map<Integer, Integer> materialsInStock = new TreeMap<>(); // materials and their quantities <id, countOfMaterial> *countOfMat > 0
-	// В скобочках treeMap можно настроить сортировку comparator!!!
+	Map<Material, Integer> materialsInStock = new TreeMap<>();
+	
 	Warehouse(int id) {
 		this.id = id;
-		for (int i = 0; i < countOfAllMaterialsInGame; i++) {
-			cellsWithID[i] = i;
-		}
 	}
 	
+	public int getId() {
+		return id;
+	}
 	
-	public void add(Material material) {
-		
+	public String getAllMaterialsInStock() {
+		StringBuilder sb = new StringBuilder();
+		int count = 0;
+		for (Map.Entry<Material, Integer> pair : materialsInStock.entrySet()) {
+			count++;
+			sb.append(count + ". " + pair.getKey().getName() + " - " + pair.getValue() + " (Max-" + pair.getKey().getMaxQuantity() + ")\n");
+		}
+		return sb.toString();
+	}
+	
+	public void add(Material material, int count) {		// max - 1000		450		650		.550.
+		int freeSpace = getAmountOfFreeSpace(material, count);
+		if (count <= freeSpace) {
+			int newCount = materialsInStock.get(material) == null ? count : materialsInStock.get(material) + count;
+			materialsInStock.put(material, Integer.valueOf(newCount));
+		} else {
+			materialsInStock.put(material, freeSpace);
+		}
 	}
 	
 	public void delete(Material material) {
 		
 	}
 	
-	public void moveTo(Material material, Warehouse otherWarehouse) {
+	public void moveTo(Material material, int count, Warehouse otherWarehouse) {
 		
 	}
+	
+	private int getAmountOfFreeSpace(Material material, int count) {
+		Integer inStock = materialsInStock.get(material);
+		if (inStock == null) {
+			return material.getMaxQuantity();
+		} else {
+			return material.getMaxQuantity() - inStock;
+		}
+	}
 }
-
-
-// создать фабричный класс:
-// 		присваивает ID новому складу
-// 		сохранение порядка склада при удалении, без перемещения объектов в массиве, а с изменением их ID
-
-// 
-
-
-
-
-
-
-
-
-
-
-//
-//private Map<Material, Integer> materials = new TreeMap<>();		// list of materials and their quantities
-//
-//
-//public Warehouse() {
-//	id++;
-//	
-//}
-//
-//public getMaterial

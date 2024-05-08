@@ -1,9 +1,10 @@
 package com.azrob.warehouse;
 
 public enum Material {
-	IRON_ORE(0, "Iron Ore", "Made from substance using a synthesizer.", "Iron_Ore.jpg", 1000),
-	IRON_PLATE(1, "Iron Plate", "Made from iron ore using a press.", "Iron_Plate.jpg", 1000),
-	IRON_ROD(2, "Iron Rod", "Made from an iron plate using a cutter.", "Iron_Rod.jpg", 1000);
+	IRON_ORE(1, "Iron Ore", "Made from substance using a synthesizer.", "Iron_Ore.jpg", 1000),
+	IRON_PLATE(2, "Iron Plate", "Made from iron ore using a press.", "Iron_Plate.jpg", 1000),
+	IRON_ROD(3, "Iron Rod", "Made from an iron plate using a cutter.", "Iron_Rod.jpg", 1000);
+	// ...
 	
 	private final int id;
 	private final String name;
@@ -45,3 +46,5 @@ public enum Material {
 		maxQuantity += quantity;
 	}
 }
+
+// DOOOOOOOONNNEEEEEEEEEE!!!!!!!!!!
