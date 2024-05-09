@@ -5,7 +5,7 @@ import java.util.TreeMap;
 
 public class Warehouse {
 	int id;
-	Map<Material, Integer> materialsInStock = new TreeMap<>();
+	Map<Material, Integer> materialsInStock = new TreeMap<>();		// <TypeOfMaterial, Quantity>
 	
 	Warehouse(int id) {
 		this.id = id;
@@ -13,6 +13,15 @@ public class Warehouse {
 	
 	public int getId() {
 		return id;
+	}
+	
+	public boolean checkMaterial(Material material) {
+		return materialsInStock.get(material) != null;
+	}
+	
+	public int countOfMaterials(Material material) {
+		Integer count = materialsInStock.get(material);
+		return count == null ? 0 : count;
 	}
 	
 	public String getAllMaterialsInStock() {
@@ -25,24 +34,33 @@ public class Warehouse {
 		return sb.toString();
 	}
 	
-	public void add(Material material, int count) {		// max - 1000		450		650		.550.
+	public int addMaterial(Material material, int count) {		// add material and returns the added quantity 
 		int freeSpace = getAmountOfFreeSpace(material, count);
 		if (count <= freeSpace) {
 			int newCount = materialsInStock.get(material) == null ? count : materialsInStock.get(material) + count;
 			materialsInStock.put(material, Integer.valueOf(newCount));
+			return count;
 		} else {
-			materialsInStock.put(material, freeSpace);
+			materialsInStock.put(material, material.getMaxQuantity());
+			return freeSpace;
 		}
 		
 	}
 	
-	public void delete(Material material) {
-		
+	public void deleteMaterial(Material material, int count) {
+		int newCount = materialsInStock.get(material) - count;
+		if (newCount == 0) {
+			materialsInStock.remove(material);
+		} else {
+			materialsInStock.put(material, newCount);
+		}
 	}
 	
-	public void moveTo(Material material, int count, Warehouse otherWarehouse) {
-		
+	public void sendToAnotherWarehouse(Material material, int count, Warehouse otherWarehouse) {
+		deleteMaterial(material, count);
+		otherWarehouse.addMaterial(material, count);
 	}
+	
 	
 	private int getAmountOfFreeSpace(Material material, int count) {
 		Integer inStock = materialsInStock.get(material);

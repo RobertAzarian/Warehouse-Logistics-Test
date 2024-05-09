@@ -7,16 +7,3 @@ public class Main {
 		player1.play();
 	}
 }
-
-// Возможная фича - класс player для системы управления:
-// 1. Выввод списка склада/материалов
-// 2. Возможность управления
-// Всё что сейчас в мейне перевести в класс player
-
-
-
-
-
-
-//WarehouseManagement warehouseManagement = new WarehouseManagement();
-// warehouseManagement.createWarehouse();
