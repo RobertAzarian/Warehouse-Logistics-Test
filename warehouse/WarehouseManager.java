@@ -93,6 +93,7 @@ public class WarehouseManager {
 			for (int number : warehouses.keySet()) {
 				list.append("Warehouse №-" + number + "\n");
 			}
+			list.append("  Total warehouses - " + warehouses.size());
 			return list.toString();
 		} else {
 			return "There are no warehouses.";
@@ -109,7 +110,7 @@ public class WarehouseManager {
 	private void addMaterial(Warehouse warehouse) {
 		System.out.println("    What material should be added?");
 		for (Material material : Material.values()) {
-			System.out.println("\t" + material.getId() + ". " + material.getName() + " - " + warehouse.countOfMaterials(material));
+			System.out.println("\t" + material.getId() + ". " + material.getName() + " - " + warehouse.countOfMaterial(material));
 		}
 		System.out.println("\t0. Cancel adding");
 		
@@ -135,36 +136,43 @@ public class WarehouseManager {
 	
 	
 	private void deleteMaterial(Warehouse warehouse) {
-		System.out.println("    What material should be deleted?");
-		for (Material material : Material.values()) {
-			System.out.println("\t" + material.getId() + ". " + material.getName() + " - " + warehouse.countOfMaterials(material));
-		}
-		System.out.println("\t0. Cancel deleting");
-		
-		int choice = getPlayersChoice();
-		if (choice <= 0) {
-			System.out.println("        [Input Error!]");
-			return;
-		}
-		System.out.println();
-		
-		if (choice > 0 && choice <= materialsInGame && warehouse.checkMaterial(listOfAllMaterials.get(choice))) {	// Странный момент
-			Material material = listOfAllMaterials.get(choice);
-			int maxToDelete = warehouse.countOfMaterials(material);
+		if (!warehouse.isWarehouseEmpty()) {
+			System.out.println("    What material should be deleted?");
+			for (Material material : Material.values()) {
+				int count = warehouse.countOfMaterial(material);
+				if (count != 0) {
+					System.out.println("\t" + material.getId() + ". " + material.getName() + " - " + count);
+				}
+			}
+			System.out.println("\t0. Cancel deleting");
 			
-			System.out.println("\n    How much materials to delete? (maximum to delete - " + maxToDelete + ")");
-			int count = getPlayersChoice();
-			if (count <= 0) {
+			int choice = getPlayersChoice();
+			if (choice <= 0) {
 				System.out.println("        [Input Error!]");
 				return;
 			}
-			if (count <= maxToDelete) {
-				warehouse.deleteMaterial(material, count);
+			System.out.println();
+			
+			if (choice > 0 && choice <= materialsInGame && warehouse.checkMaterial(listOfAllMaterials.get(choice))) {	// Странный момент
+				Material material = listOfAllMaterials.get(choice);
+				int maxToDelete = warehouse.countOfMaterial(material);
+				
+				System.out.println("\n    How much materials to delete? (maximum to delete - " + maxToDelete + ")");
+				int count = getPlayersChoice();
+				if (count <= 0) {
+					System.out.println("        [Input Error!]");
+					return;
+				}
+				if (count <= maxToDelete) {
+					warehouse.deleteMaterial(material, count);
+				} else {
+					System.out.println("There are not so many materials.");
+				}
 			} else {
-				System.out.println("There are not so many materials.");
+				System.out.println("        [Input Error!]");
 			}
 		} else {
-			System.out.println("        [Input Error!]");
+			System.out.println("Warehouse is empty.");
 		}
 	}
 	
@@ -178,16 +186,19 @@ public class WarehouseManager {
 			Warehouse otherWarehouse = warehouses.get(id);
 			System.out.println("    What material should be sent?");
 			for (Material material : Material.values()) {
-				System.out.println("\t" + material.getId() + ". " + material.getName() + " - " + warehouse.countOfMaterials(material));
+				int count = warehouse.countOfMaterial(material);
+				if (count != 0) {
+					System.out.println("\t" + material.getId() + ". " + material.getName() + " - " + warehouse.countOfMaterial(material));
+				}
 			}
 			System.out.println("\t0. Cancel sending");
 			
 			int choice = getPlayersChoice();
-			System.out.println();
+			//System.out.println();
 			
 			if (choice > 0 && choice <= materialsInGame && warehouse.checkMaterial(listOfAllMaterials.get(choice))) {
 				Material material = listOfAllMaterials.get(choice);
-				int maxToSend = warehouse.countOfMaterials(material);
+				int maxToSend = warehouse.countOfMaterial(material);
 				
 				System.out.println("\n    How much material to send? (maximum to send - " + maxToSend + ")");
 				int count = getPlayersChoice();
@@ -207,6 +218,8 @@ public class WarehouseManager {
 			}
 		} else if (id == warehouse.getId()) {
 			System.out.println("This is the same warehouse.");
+		} else if (id == -1) {
+			System.out.println("        [Input Error!]");
 		} else {
 			System.out.println("Warehouse number " + id + " does not exist.");
 		}

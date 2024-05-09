@@ -106,10 +106,3 @@ public class Player {
 		return choice;
 	}
 }
-
-
-
-
-
-
-

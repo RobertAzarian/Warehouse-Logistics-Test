@@ -4,8 +4,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class Warehouse {
-	int id;
-	Map<Material, Integer> materialsInStock = new TreeMap<>();		// <TypeOfMaterial, Quantity>
+	private int id;
+	private Map<Material, Integer> materialsInStock = new TreeMap<>();		// <TypeOfMaterial, Quantity>
 	
 	Warehouse(int id) {
 		this.id = id;
@@ -15,11 +15,15 @@ public class Warehouse {
 		return id;
 	}
 	
+	public boolean isWarehouseEmpty() {
+		return materialsInStock.isEmpty();
+	}
+	
 	public boolean checkMaterial(Material material) {
 		return materialsInStock.get(material) != null;
 	}
 	
-	public int countOfMaterials(Material material) {
+	public int countOfMaterial(Material material) {
 		Integer count = materialsInStock.get(material);
 		return count == null ? 0 : count;
 	}
